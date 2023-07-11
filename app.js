@@ -31,10 +31,26 @@ mongoose.connect('mongodb://127.0.0.1:27017/wikiDB', {
 =======*/
 // home
 app.get('/', (req, res) => {
-    res.send(`Hello World`)
+    res.render('home')
 })
 
+// display all articles
+app.get('/articles', async(req, res) => {
+    const articles = await Article.find({});
+    res.render('articles/index', {articles})
+})
 
+// form to create new article
+app.get('/articles/new', (req, res) => {
+    res.render('articles/new')
+})
+
+// create new article
+app.post('/articles', async(req, res) => {
+    const article = new Article(req.body)
+    await article.save();
+    res.redirect(`/articles`);
+})
 
 
 app.listen(3000, function() {
